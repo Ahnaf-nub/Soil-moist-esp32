@@ -5,6 +5,7 @@
 #include <NewPing.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <ESP32Servo.h>
 
 // Replace with your network credentials
 const char* ssid = "SSID";
@@ -20,14 +21,17 @@ const char* iftttWebhookUrl = "https://maker.ifttt.com/trigger/water_tank_low/wi
 #define TRIG_PIN 4
 #define ECHO_PIN 4
 #define MAX_DISTANCE 100  // Maximum distance in cm (height of the water tank)
+#define servo 18
 
 int soilMoistureRaw = 0;
 int soilMoisturePercent = 0;
 int waterLevelPercent = 0;
+int pos = 0;
 bool emailSent = false;
 
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
 NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
+Servo myservo;
 
 void setup() {
   pinMode(RELAY_PIN, OUTPUT);
@@ -47,6 +51,18 @@ void setup() {
   Serial.println("Connected to Wi-Fi");
 }
 
+void sweep() {
+  for (pos = 0; pos <= 180; pos += 1) {  // goes from 0 degrees to 180 degrees
+    // in steps of 1 degree
+    myservo.write(pos);  // tell servo to go to position in variable 'pos'
+    delay(15);           // waits 15ms for the servo to reach the position
+  }
+  for (pos = 180; pos >= 0; pos -= 1) {  // goes from 180 degrees to 0 degrees
+    myservo.write(pos);                  // tell servo to go to position in variable 'pos'
+    delay(15);                           // waits 15ms for the servo to reach the position
+  }
+}
+
 void loop() {
   // Soil Moisture Calculation
   soilMoistureRaw = analogRead(SOIL_SENSOR_PIN);
@@ -58,6 +74,7 @@ void loop() {
 
   // Control the relay based on soil moisture level
   if (soilMoisturePercent < 40) {
+    sweep();
     digitalWrite(RELAY_PIN, LOW);  // Activate relay
   } else {
     digitalWrite(RELAY_PIN, HIGH);  // Deactivate relay
@@ -109,7 +126,7 @@ void loop() {
 void sendEmailNotification() {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
-    http.begin(iftttWebhookUrl);  // Specify the URL
+    http.begin(iftttWebhookUrl);           // Specify the URL
     int httpResponseCode = http.POST("");  // Send the request
 
     if (httpResponseCode > 0) {
