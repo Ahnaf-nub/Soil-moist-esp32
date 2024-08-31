@@ -1,6 +1,6 @@
 # Smart Irrigation System with ESP32
 This project is a smart irrigation system powered by the ESP32 microcontroller, designed to monitor soil moisture levels and water tank levels, automatically control a relay to manage watering and also servo for scattering the water, and send notifications when action is needed. The system is ideal for small gardens, potted plants, and automated greenhouse setups.
-
+![image](https://github.com/user-attachments/assets/48b1ed7e-986b-4a91-b085-ef5e6860af26)
 # Features
 **Soil Moisture Monitoring: Continuously measures soil moisture using a capacitive soil moisture sensor and displays the percentage on an OLED screen**
 **Water Level Monitoring: Uses an ultrasonic sensor to measure the water level in a tank and displays the level as a percentage.**
