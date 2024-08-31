@@ -19,3 +19,17 @@ This project is a smart irrigation system powered by the ESP32 microcontroller, 
 **Arduino IDE with ESP32 board support**
 **IFTT Account**
 **Required libraries: Adafruit_SSD1306, Adafruit_GFX, NewPing, WiFi, HTTPClient, ESP32Servo**
+### Running the code:
+Clone the Repository:
+```
+git https://github.com/Ahnaf-nub/Soil-moist-esp32.git
+cd Soil-moist-esp32
+```
+**Install Libraries from the library manager**:
+1. HTTPClient
+2. ESP32Servo
+3. NewPing
+4. Adafruit_SSD1306
+*Upload `main.ino` to your esp32 board!
+## N.B:
+Replace `https://maker.ifttt.com/trigger/water_tank_low/with/key/IFTTT_KEY` with your own Webhook URL from IFTT.
